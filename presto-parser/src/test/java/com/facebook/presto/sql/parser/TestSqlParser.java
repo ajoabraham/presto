@@ -119,6 +119,7 @@ public class TestSqlParser
         processSql("cast(a as varchar)");
         processSql("cast(a as char(30))");
         processSql("cast(a as binary)");
+        processSql("cast(a as decimal)");
     }
 
     private void processSql(String sql)
