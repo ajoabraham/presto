@@ -541,14 +541,21 @@ type
     : VARCHAR                    -> IDENT["VARCHAR"]
     | BIGINT                     -> IDENT["BIGINT"]
     | DOUBLE                     -> IDENT["DOUBLE"]
+    | DOUBLE PRECISION			 -> IDENT["DOUBLE PRECISION"]
     | BOOLEAN                    -> IDENT["BOOLEAN"]
     | TIME WITH TIME ZONE        -> IDENT["TIME WITH TIME ZONE"]
+    | TIME '(' p=integer ')' WITH TIME ZONE        -> IDENT["TIME WITH TIME ZONE" + "(" + $p.text + ")"]
+    | TIME WITHOUT TIME ZONE        -> IDENT["TIME WITHOUT TIME ZONE"]
+    | TIME '(' p=integer ')' WITHOUT TIME ZONE        -> IDENT["TIME WITHOUT TIME ZONE" + "(" + $p.text + ")"]
     | TIMESTAMP WITH TIME ZONE   -> IDENT["TIMESTAMP WITH TIME ZONE"]
+    | TIMESTAMP '(' p=integer ')' WITH TIME ZONE        -> IDENT["TIMESTAMP WITH TIME ZONE" + "(" + $p.text + ")"]    
+    | TIMESTAMP WITHOUT TIME ZONE        -> IDENT["TIMESTAMP WITHOUT TIME ZONE"]
+    | TIMESTAMP '(' p=integer ')' WITHOUT TIME ZONE        -> IDENT["TIMESTAMP WITHOUT TIME ZONE" + "(" + $p.text + ")"]   
     | ARRAY '<' t=type '>'       -> IDENT["ARRAY<" + $t.text + ">"]
     | VARCHAR '(' i=integer ')'  -> IDENT["VARCHAR(" + $i.text + ")"]
     | BIGINT  '(' i=integer ')'  -> IDENT["BIGINT(" + $i.text + ")"]
     | DECIMAL '(' p=integer ',' s=integer ')'  -> IDENT["DECIMAL(" + $p.text + "," + $s.text + ")"]
-    | ident '(' i=integer ')'    -> IDENT[$ident.text + "(" + $i.text + ")"]
+    | ident (VARYING)? '(' i=integer ')'    -> IDENT[$ident.text + "(" + $i.text + ")"]
     | ident '(' p=integer ',' s=integer ')'  -> IDENT[$ident.text + "(" + $p.text + "," + $s.text + ")"]
     | ident
     ;
@@ -785,6 +792,7 @@ nonReserved
     | TABLESAMPLE | SYSTEM | BERNOULLI | POISSONIZED | USE | JSON | TO
     | RESCALED | APPROXIMATE | AT | CONFIDENCE
     | VIEW | REPLACE | D | LAST
+    | INT | INTEGER | CHARACTER | NUMERIC
     ;
 
 SELECT: 'SELECT';
@@ -865,6 +873,7 @@ FOLLOWING: 'FOLLOWING';
 CURRENT: 'CURRENT';
 ROW: 'ROW';
 WITH: 'WITH';
+WITHOUT: 'WITHOUT';
 RECURSIVE: 'RECURSIVE';
 VALUES: 'VALUES';
 ARRAY: 'ARRAY';
@@ -922,6 +931,7 @@ ALTER: 'ALTER';
 RENAME: 'RENAME';
 UNNEST: 'UNNEST';
 TEMP: 'TEMP';
+PRECISION: 'PRECISION';
 DATA: 'DATA';
 D: 'D';
 
