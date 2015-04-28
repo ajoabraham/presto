@@ -555,9 +555,27 @@ type
     | VARCHAR '(' i=integer ')'  -> IDENT["VARCHAR(" + $i.text + ")"]
     | BIGINT  '(' i=integer ')'  -> IDENT["BIGINT(" + $i.text + ")"]
     | DECIMAL '(' p=integer ',' s=integer ')'  -> IDENT["DECIMAL(" + $p.text + "," + $s.text + ")"]
-    | ident (VARYING)? '(' i=integer ')'    -> IDENT[$ident.text + "(" + $i.text + ")"]
+    | vero_type
+    ;
+
+vero_type
+    : vero_type_nonvarying_size
+    | vero_type_varying_size
+    | vero_type_varying_nosize
     | ident '(' p=integer ',' s=integer ')'  -> IDENT[$ident.text + "(" + $p.text + "," + $s.text + ")"]
     | ident
+    ;
+
+vero_type_nonvarying_size
+    : ident '(' i=integer ')'    -> IDENT[$ident.text + "(" + $i.text + ")"]
+    ;
+
+vero_type_varying_size
+    : ident VARYING '(' i=integer ')'       -> IDENT[$ident.text + " VARYING " + "(" + $i.text + ")"]
+    ;
+    
+vero_type_varying_nosize
+    : ident VARYING                         -> IDENT[$ident.text + " VARYING"]
     ;
 
 caseExpression
@@ -792,7 +810,7 @@ nonReserved
     | TABLESAMPLE | SYSTEM | BERNOULLI | POISSONIZED | USE | JSON | TO
     | RESCALED | APPROXIMATE | AT | CONFIDENCE
     | VIEW | REPLACE | D | LAST
-    | INT | INTEGER | CHARACTER | NUMERIC
+    | INT | INTEGER | CHARACTER | NUMERIC | CHAR
     ;
 
 SELECT: 'SELECT';

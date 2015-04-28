@@ -77,43 +77,56 @@ public class TestSqlParser
     public void testYulin()
             throws Exception
     {
-        SQL_PARSER.createExpression("1+sum(@[#abc #ab].asds)");
-        SQL_PARSER.createExpression("1+sum(@[#abc #ab].asds)");
-        SQL_PARSER.createExpression("1+sum(@asds)");
-        SQL_PARSER.createExpression("@m1");
-        SQL_PARSER.createExpression("@[QBKZ70D4M].[Revenue]");
-        SQL_PARSER.createExpression("@abc/@dce");
-        SQL_PARSER.createExpression("@[abc/dce]");
-        SQL_PARSER.createExpression("current_date");
-        SQL_PARSER.createExpression("current_date()");
-        //SQL_PARSER.createExpression("D'2015-03-03'");
-        //String exp = "D('111', 222)";
-        //String exp = "D'2015-03-03'";
-        //String exp = "current_date";
-        //String exp = "current_date()";
-        //String exp = "cast(a as int)";
-        //String exp = "cast(a as integer(3, 2))";
-        //String exp = "cast(a as bit)";
-        //String exp = "cast(a as bit varying (3))";
-        //String exp = "cast(a as bigint)";
-        //String exp = "cast(a as bigserial)";
-        //String exp = "cast(a as boolean)";
-        //String exp = "cast(a as box)";
-        //String exp = "cast(a as character)";
-        //String exp = "cast(a as character varying (3))";
-        //String exp = "cast(a as date)";
-        //String exp = "cast(a as double precision)";
-        //String exp = "cast(a as numeric(3))";
-        //String exp = "cast(a as real)";
-        //String exp = "cast(a as smallint)";
-        //String exp = "cast(a as text)";
-        //String exp = "cast(a as time (3) with time zone)";
-        //String exp = "cast(a as time with time zone)";
-        String exp = "cast(a as timestamp (2) without time zone)";
-        Expression lastone = SQL_PARSER.createExpression(exp);
-        CommonTree commone = SQL_PARSER.parseExpression(exp);
-        System.out.println("treetostring -> " + TreePrinter.treeToString(commone));
-        System.out.println("expression tostring() -> " + lastone.toString());
+        /*
+        processSql("1+sum(@[#abc #ab].asds)");
+        processSql("1+sum(@[#abc #ab].asds)");
+        processSql("1+sum(@asds)");
+        processSql("@m1");
+        processSql("@[QBKZ70D4M].[Revenue]");
+        processSql("@abc/@dce");
+        processSql("@[abc/dce]");
+        processSql("current_date");
+        processSql("current_date()");
+        processSql("D'2015-03-03'");
+        processSql("D('111', 222)");
+        processSql("D'2015-03-03'");
+        processSql("current_date");
+        */
+        processSql("current_date()");
+        processSql("cast(a as int)");
+        processSql("cast(a as integer(3, 2))");
+        processSql("cast(a as bit)");
+        processSql("cast(a as bit varying (3))");
+        processSql("cast(a as xxx varying)");
+        processSql("cast(a as bigint)");
+        processSql("cast(a as bigserial)");
+        processSql("cast(a as boolean)");
+        processSql("cast(a as box)");
+        processSql("cast(a as character)");
+        processSql("cast(a as character varying (3))");
+        processSql("cast(a as date)");
+        processSql("cast(a as double precision)");
+        processSql("cast(a as numeric(3))");
+        processSql("cast(a as real)");
+        processSql("cast(a as real(3, 4))");
+        processSql("cast(a as float)");
+        processSql("cast(a as float(3, 4))");
+        processSql("cast(a as smallint)");
+        processSql("cast(a as text)");
+        processSql("cast(a as time (3) with time zone)");
+        processSql("cast(a as time with time zone)");
+        processSql("cast(a as int)");
+        processSql("cast(a as varchar)");
+        processSql("cast(a as char(30))");
+        processSql("cast(a as binary)");
+    }
+
+    private void processSql(String sql)
+    {
+        Expression expression = SQL_PARSER.createExpression(sql);
+        CommonTree commonTree = SQL_PARSER.parseExpression(sql);
+        System.out.println("treetostring -> " + TreePrinter.treeToString(commonTree));
+        System.out.println("expression tostring() -> " + expression.toString());
     }
 
     @Test
