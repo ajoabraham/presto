@@ -120,6 +120,16 @@ public class TestSqlParser
         processSql("cast(a as char(30))");
         processSql("cast(a as binary)");
         processSql("cast(a as decimal)");
+
+        processSql("cast(a as varchar2)");
+        processSql("cast(a as number)");
+        processSql("cast(a as number(7, 2))");
+        processSql("cast(a as int2)");
+
+        processSql("cast(a as long varbyte(1))");
+        processSql("cast(a as long varbyte)");
+        processSql("cast(a as char varying)");
+        processSql("cast(a as long varchar)");
     }
 
     private void processSql(String sql)

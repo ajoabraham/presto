@@ -563,19 +563,27 @@ vero_type
     | vero_type_varying_size
     | vero_type_varying_nosize
     | ident '(' p=integer ',' s=integer ')'  -> IDENT[$ident.text + "(" + $p.text + "," + $s.text + ")"]
-    | ident
+    | vero_type_nonvarying_nosize
     ;
 
+vero_type_nonvarying_nosize
+	: LONG ident							-> IDENT["LONG " + $ident.text]
+	| ident
+	;
+
 vero_type_nonvarying_size
-    : ident '(' i=integer ')'    -> IDENT[$ident.text + "(" + $i.text + ")"]
+	: LONG ident '(' i=integer ')'    		-> IDENT["LONG " + $ident.text + "(" + $i.text + ")"]
+    | ident '(' i=integer ')'    			-> IDENT[$ident.text + "(" + $i.text + ")"]
     ;
 
 vero_type_varying_size
-    : ident VARYING '(' i=integer ')'       -> IDENT[$ident.text + " VARYING " + "(" + $i.text + ")"]
+    : LONG ident VARYING '(' i=integer ')'  -> IDENT["LONG " + $ident.text + " VARYING " + "(" + $i.text + ")"]
+    | ident VARYING '(' i=integer ')'       -> IDENT[$ident.text + " VARYING " + "(" + $i.text + ")"]
     ;
     
 vero_type_varying_nosize
-    : ident VARYING                         -> IDENT[$ident.text + " VARYING"]
+    : LONG ident VARYING                    -> IDENT["LONG " + $ident.text + " VARYING"]
+    | ident VARYING                         -> IDENT[$ident.text + " VARYING"]
     ;
 
 caseExpression
@@ -810,7 +818,7 @@ nonReserved
     | TABLESAMPLE | SYSTEM | BERNOULLI | POISSONIZED | USE | JSON | TO
     | RESCALED | APPROXIMATE | AT | CONFIDENCE
     | VIEW | REPLACE | D | LAST
-    | INT | INTEGER | CHARACTER | NUMERIC | CHAR | DECIMAL
+    | INT | INTEGER | CHARACTER | NUMERIC | CHAR | DECIMAL | NUMBER | VARCHAR
     ;
 
 SELECT: 'SELECT';
@@ -952,6 +960,7 @@ TEMP: 'TEMP';
 PRECISION: 'PRECISION';
 DATA: 'DATA';
 D: 'D';
+LONG: 'LONG';
 
 EQ  : '=';
 NEQ : '<>' | '!=';
