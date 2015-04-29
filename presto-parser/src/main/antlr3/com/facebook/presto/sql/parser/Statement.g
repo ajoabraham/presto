@@ -568,17 +568,23 @@ vero_type
 
 vero_type_nonvarying_nosize
 	: LONG ident							-> IDENT["LONG " + $ident.text]
+	| LONG ident FOR BIT DATA				-> IDENT["LONG " + $ident.text + " FOR BIT DATA"]
 	| ident
+	| ident FOR BIT DATA					-> IDENT[$ident.text + " FOR BIT DATA"]
 	;
 
 vero_type_nonvarying_size
-	: LONG ident '(' i=integer ')'    		-> IDENT["LONG " + $ident.text + "(" + $i.text + ")"]
-    | ident '(' i=integer ')'    			-> IDENT[$ident.text + "(" + $i.text + ")"]
+	: LONG ident '(' i=integer ')'    					-> IDENT["LONG " + $ident.text + "(" + $i.text + ")"]
+	| LONG ident '(' i=integer ')' FOR BIT DATA    		-> IDENT["LONG " + $ident.text + "(" + $i.text + ")" + " FOR BIT DATA"]
+    | ident '(' i=integer ')'    						-> IDENT[$ident.text + "(" + $i.text + ")"]
+    | ident '(' i=integer ')' FOR BIT DATA    			-> IDENT[$ident.text + "(" + $i.text + ")" + " FOR BIT DATA"]
     ;
 
 vero_type_varying_size
-    : LONG ident VARYING '(' i=integer ')'  -> IDENT["LONG " + $ident.text + " VARYING " + "(" + $i.text + ")"]
-    | ident VARYING '(' i=integer ')'       -> IDENT[$ident.text + " VARYING " + "(" + $i.text + ")"]
+    : LONG ident VARYING '(' i=integer ')'  			-> IDENT["LONG " + $ident.text + " VARYING " + "(" + $i.text + ")"]
+    | LONG ident VARYING '(' i=integer ')' FOR BIT DATA -> IDENT["LONG " + $ident.text + " VARYING " + "(" + $i.text + ")" + " FOR BIT DATA"]
+    | ident VARYING '(' i=integer ')'       			-> IDENT[$ident.text + " VARYING " + "(" + $i.text + ")"]
+    | ident VARYING '(' i=integer ')' FOR BIT DATA      -> IDENT[$ident.text + " VARYING " + "(" + $i.text + ")" + " FOR BIT DATA"]
     ;
     
 vero_type_varying_nosize
@@ -818,7 +824,7 @@ nonReserved
     | TABLESAMPLE | SYSTEM | BERNOULLI | POISSONIZED | USE | JSON | TO
     | RESCALED | APPROXIMATE | AT | CONFIDENCE
     | VIEW | REPLACE | D | LAST
-    | INT | INTEGER | CHARACTER | NUMERIC | CHAR | DECIMAL | NUMBER | VARCHAR
+    | INT | INTEGER | CHARACTER | NUMERIC | CHAR | DECIMAL | NUMBER | VARCHAR | BIT
     ;
 
 SELECT: 'SELECT';
@@ -961,6 +967,7 @@ PRECISION: 'PRECISION';
 DATA: 'DATA';
 D: 'D';
 LONG: 'LONG';
+BIT: 'BIT';
 
 EQ  : '=';
 NEQ : '<>' | '!=';
