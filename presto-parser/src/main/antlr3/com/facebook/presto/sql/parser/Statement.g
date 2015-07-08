@@ -129,6 +129,9 @@ tokens {
 }
 
 @lexer::members {
+    private boolean pmode = false;
+    private int popen = 0;
+
     private EnumSet<IdentifierSymbol> allowedIdentifierSymbols = EnumSet.noneOf(IdentifierSymbol.class);
 
     public void setAllowedIdentifierSymbols(EnumSet<IdentifierSymbol> allowedIdentifierSymbols)
@@ -499,7 +502,7 @@ literal
     | (TIMESTAMP) => TIMESTAMP STRING -> ^(TIMESTAMP STRING)
     | (INTERVAL) => intervalLiteral
     | (ARRAY) => arrayConstructor
-    | D STRING  				      -> ^(FUNCTION_CALL ^(QNAME IDENT["D"]) STRING)
+    | D '\'' STRING  				      -> ^(FUNCTION_CALL ^(QNAME IDENT["D"]) STRING)
     | ident STRING                    -> ^(LITERAL ident STRING)
     ;
 
@@ -521,7 +524,8 @@ intervalField
     ;
 
 specialFunction
-    : CURRENT_DATE ('('')')?					   -> ^(CURRENT_DATE)
+    : CURRENT_DATE ('(' ')')?					   -> ^(CURRENT_DATE)
+    | PASS PASS_WP         -> ^(PASS PASS_WP)
     | CURRENT_TIME ('(' integer ')')?              -> ^(CURRENT_TIME integer?)
     | CURRENT_TIMESTAMP ('(' integer ')')?         -> ^(CURRENT_TIMESTAMP integer?)
     | LOCALTIME ('(' integer ')')?                 -> ^(LOCALTIME integer?)
@@ -532,14 +536,10 @@ specialFunction
     | TRY_CAST '(' expr AS type ')'                -> ^(TRY_CAST expr type)
     ;
 
-//veroFunction
-//    : TRIM '(' expr ')'         -> ^(FUNCTION_CALL ^(QNAME IDENT["trim"]) ^(QNAME IDENT["both"]) expr)
-//    ;
-
 // TODO: this should be 'dataType', which supports arbitrary type specifications. For now we constrain to simple types
 type
-    : VARCHAR                    -> IDENT["VARCHAR"]
-    | BIGINT                     -> IDENT["BIGINT"]
+    : //VARCHAR                    -> IDENT["VARCHAR"]
+    BIGINT                     -> IDENT["BIGINT"]
     | DOUBLE                     -> IDENT["DOUBLE"]
     | DOUBLE PRECISION			 -> IDENT["DOUBLE PRECISION"]
     | BOOLEAN                    -> IDENT["BOOLEAN"]
@@ -552,9 +552,9 @@ type
     | TIMESTAMP WITHOUT TIME ZONE        -> IDENT["TIMESTAMP WITHOUT TIME ZONE"]
     | TIMESTAMP '(' p=integer ')' WITHOUT TIME ZONE        -> IDENT["TIMESTAMP WITHOUT TIME ZONE" + "(" + $p.text + ")"]   
     | ARRAY '<' t=type '>'       -> IDENT["ARRAY<" + $t.text + ">"]
-    | VARCHAR '(' i=integer ')'  -> IDENT["VARCHAR(" + $i.text + ")"]
+    // | VARCHAR '(' i=integer ')'  -> IDENT["VARCHAR(" + $i.text + ")"]
     | BIGINT  '(' i=integer ')'  -> IDENT["BIGINT(" + $i.text + ")"]
-    | DECIMAL '(' p=integer ',' s=integer ')'  -> IDENT["DECIMAL(" + $p.text + "," + $s.text + ")"]
+    // already covered by ident: | DECIMAL '(' p=integer ',' s=integer ')'  -> IDENT["DECIMAL(" + $p.text + "," + $s.text + ")"]
     | vero_type
     ;
 
@@ -827,6 +827,7 @@ nonReserved
     | INT | INTEGER | CHARACTER | NUMERIC | CHAR | DECIMAL | NUMBER | VARCHAR | BIT
     ;
 
+PASS: 'PASS' { pmode=true; };
 SELECT: 'SELECT';
 FROM: 'FROM';
 AS: 'AS';
@@ -1009,6 +1010,20 @@ QUOTED_IDENT
 BACKQUOTED_IDENT
     : '`' ( ~'`' | '``' )* '`'
         { setText(getText().substring(1, getText().length() - 1).replace("``", "`")); }
+    ;
+
+PASS_WP
+    @init { popen = 0; }
+    @after { pmode = false; }
+    :
+    {pmode}?=>
+        '('
+        (
+                ( {popen > 0}?=> ')' { popen--; } )
+                | (  '(' { popen++; } )
+                | ~('(' | ')')
+        )*
+        {popen == 0}?=> ')'
     ;
 
 fragment EXPONENT

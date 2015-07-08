@@ -358,6 +358,7 @@ expr returns [Expression value]
     | extract                 { $value = $extract.value; }
     | current_time            { $value = $current_time.value; }
     | cast                    { $value = $cast.value; }
+    | pass                    { $value = $pass.value; }
     ;
 
 exprList returns [List<Expression> value = new ArrayList<>()]
@@ -427,6 +428,10 @@ extract returns [Extract value]
 cast returns [Cast value]
     : ^(CAST expr IDENT)     { $value = new Cast($expr.value, $IDENT.text, false); }
     | ^(TRY_CAST expr IDENT) { $value = new Cast($expr.value, $IDENT.text, true); }
+    ;
+
+pass returns [Pass value]
+    : ^(PASS PASS_WP) { $value = new Pass($PASS_WP.text); }
     ;
 
 current_time returns [CurrentTime value]

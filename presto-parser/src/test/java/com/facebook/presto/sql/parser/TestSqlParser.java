@@ -13,40 +13,11 @@
  */
 package com.facebook.presto.sql.parser;
 
-import com.facebook.presto.sql.tree.AllColumns;
-import com.facebook.presto.sql.tree.ArrayConstructor;
-import com.facebook.presto.sql.tree.Cast;
-import com.facebook.presto.sql.tree.CurrentTime;
-import com.facebook.presto.sql.tree.DoubleLiteral;
-import com.facebook.presto.sql.tree.Expression;
-import com.facebook.presto.sql.tree.GenericLiteral;
-import com.facebook.presto.sql.tree.Intersect;
-import com.facebook.presto.sql.tree.IntervalLiteral;
+import com.facebook.presto.sql.tree.*;
 import com.facebook.presto.sql.tree.IntervalLiteral.IntervalField;
 import com.facebook.presto.sql.tree.IntervalLiteral.Sign;
-import com.facebook.presto.sql.tree.LongLiteral;
-import com.facebook.presto.sql.tree.NegativeExpression;
-import com.facebook.presto.sql.tree.Node;
-import com.facebook.presto.sql.tree.QualifiedName;
-import com.facebook.presto.sql.tree.Query;
-import com.facebook.presto.sql.tree.QuerySpecification;
-import com.facebook.presto.sql.tree.Relation;
-import com.facebook.presto.sql.tree.Row;
-import com.facebook.presto.sql.tree.Select;
-import com.facebook.presto.sql.tree.SelectItem;
-import com.facebook.presto.sql.tree.SingleColumn;
-import com.facebook.presto.sql.tree.SortItem;
-import com.facebook.presto.sql.tree.Statement;
-import com.facebook.presto.sql.tree.StringLiteral;
-import com.facebook.presto.sql.tree.SubscriptExpression;
-import com.facebook.presto.sql.tree.TableSubquery;
-import com.facebook.presto.sql.tree.TimeLiteral;
-import com.facebook.presto.sql.tree.TimestampLiteral;
-import com.facebook.presto.sql.tree.Union;
-import com.facebook.presto.sql.tree.Values;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.testng.annotations.Test;
 
@@ -77,7 +48,6 @@ public class TestSqlParser
     public void testYulin()
             throws Exception
     {
-        /*
         processSql("1+sum(@[#abc #ab].asds)");
         processSql("1+sum(@[#abc #ab].asds)");
         processSql("1+sum(@asds)");
@@ -91,7 +61,7 @@ public class TestSqlParser
         processSql("D('111', 222)");
         processSql("D'2015-03-03'");
         processSql("current_date");
-        */
+
         processSql("current_date()");
         processSql("cast(a as int)");
         processSql("cast(a as integer(3, 2))");
@@ -135,6 +105,8 @@ public class TestSqlParser
         processSql("cast(a as char (3) for bit data)");
         processSql("cast(a as long varchar for bit data)");
         processSql("cast(a as long varchar (3) for bit data)");
+
+        processSql("pass(cast(1 as bigint)) + 1");
     }
 
     private void processSql(String sql)
