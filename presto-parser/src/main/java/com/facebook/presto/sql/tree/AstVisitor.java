@@ -438,6 +438,6 @@ public abstract class AstVisitor<R, C>
     }
 
     protected R visitPass(Pass node, C context) {
-        return null;
+        return visitExpression(node, context);
     }
 }
