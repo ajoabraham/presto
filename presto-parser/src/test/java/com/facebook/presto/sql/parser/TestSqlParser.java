@@ -106,7 +106,7 @@ public class TestSqlParser
         processSql("cast(a as long varchar for bit data)");
         processSql("cast(a as long varchar (3) for bit data)");
 
-        processSql("pass(cast(1 as bigint)) + 1");
+        processSql("pass(@[abc] + %%% + @@@::111 + cast(1 as bigint))");
     }
 
     private void processSql(String sql)

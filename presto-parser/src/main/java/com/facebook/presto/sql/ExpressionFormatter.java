@@ -38,6 +38,7 @@ import com.facebook.presto.sql.tree.IntervalLiteral;
 import com.facebook.presto.sql.tree.IsNotNullPredicate;
 import com.facebook.presto.sql.tree.IsNullPredicate;
 import com.facebook.presto.sql.tree.LikePredicate;
+import com.facebook.presto.sql.tree.Literal;
 import com.facebook.presto.sql.tree.LogicalBinaryExpression;
 import com.facebook.presto.sql.tree.LongLiteral;
 import com.facebook.presto.sql.tree.NegativeExpression;
@@ -45,6 +46,7 @@ import com.facebook.presto.sql.tree.Node;
 import com.facebook.presto.sql.tree.NotExpression;
 import com.facebook.presto.sql.tree.NullIfExpression;
 import com.facebook.presto.sql.tree.NullLiteral;
+import com.facebook.presto.sql.tree.Pass;
 import com.facebook.presto.sql.tree.QualifiedName;
 import com.facebook.presto.sql.tree.QualifiedNameReference;
 import com.facebook.presto.sql.tree.SearchedCaseExpression;
@@ -112,7 +114,13 @@ public final class ExpressionFormatter
         {
             return "EXTRACT(" + node.getField() + " FROM " + process(node.getExpression(), context) + ")";
         }
-
+        
+        @Override
+        protected String visitPass(Pass node, Void context)
+        {
+            return node.getActualContents();
+        }
+        
         @Override
         protected String visitBooleanLiteral(BooleanLiteral node, Void context)
         {
