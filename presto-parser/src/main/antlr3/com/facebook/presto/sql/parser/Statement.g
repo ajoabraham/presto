@@ -502,7 +502,7 @@ literal
     | (TIMESTAMP) => TIMESTAMP STRING -> ^(TIMESTAMP STRING)
     | (INTERVAL) => intervalLiteral
     | (ARRAY) => arrayConstructor
-    | D '\'' STRING  				      -> ^(FUNCTION_CALL ^(QNAME IDENT["D"]) STRING)
+    | D STRING          		      -> ^(FUNCTION_CALL ^(QNAME IDENT["D"]) STRING)
     | ident STRING                    -> ^(LITERAL ident STRING)
     ;
 
