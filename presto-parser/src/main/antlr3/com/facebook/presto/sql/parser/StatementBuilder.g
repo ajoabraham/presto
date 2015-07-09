@@ -456,6 +456,7 @@ arithmeticType returns [ArithmeticExpression.Type value]
     | '*' { $value = ArithmeticExpression.Type.MULTIPLY; }
     | '/' { $value = ArithmeticExpression.Type.DIVIDE; }
     | '%' { $value = ArithmeticExpression.Type.MODULUS; }
+
     ;
 
 comparisonExpression returns [ComparisonExpression value]
@@ -470,6 +471,7 @@ comparisonType returns [ComparisonExpression.Type value]
     | GT                    { $value = ComparisonExpression.Type.GREATER_THAN; }
     | GTE                   { $value = ComparisonExpression.Type.GREATER_THAN_OR_EQUAL; }
     | IS_DISTINCT_FROM      { $value = ComparisonExpression.Type.IS_DISTINCT_FROM; }
+    | VERO_PASS_CONCAT      { $value = ComparisonExpression.Type.VERO_PASS_CONCAT; }
     ;
 
 intervalValue returns [IntervalLiteral value]

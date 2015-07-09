@@ -485,7 +485,7 @@ nullOrdering
     ;
 
 cmpOp
-    : EQ | NEQ | LT | LTE | GT | GTE
+    : EQ | NEQ | LT | LTE | GT | GTE | VERO_PASS_CONCAT
     ;
 
 subquery
@@ -976,6 +976,7 @@ LT  : '<';
 LTE : '<=';
 GT  : '>';
 GTE : '>=';
+VERO_PASS_CONCAT : '+VPC+';
 
 STRING
     : '\'' ( ~'\'' | '\'\'' )* '\''

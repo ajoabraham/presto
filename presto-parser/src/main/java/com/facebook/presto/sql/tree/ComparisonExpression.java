@@ -27,7 +27,8 @@ public class ComparisonExpression
         LESS_THAN_OR_EQUAL("<="),
         GREATER_THAN(">"),
         GREATER_THAN_OR_EQUAL(">="),
-        IS_DISTINCT_FROM("IS DISTINCT FROM");
+        IS_DISTINCT_FROM("IS DISTINCT FROM"),
+        VERO_PASS_CONCAT("");
 
         private final String value;
 
