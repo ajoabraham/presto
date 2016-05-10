@@ -534,6 +534,12 @@ specialFunction
     | EXTRACT '(' ident FROM expr ')'              -> ^(EXTRACT ident expr)
     | CAST '(' expr AS type ')'                    -> ^(CAST expr type)
     | TRY_CAST '(' expr AS type ')'                -> ^(TRY_CAST expr type)
+    | RIGHT '(' expr (',' expr)* ')'			   -> ^(FUNCTION_CALL ^(QNAME IDENT["RIGHT"]) expr expr*)
+    | LEFT '(' expr (',' expr)* ')'			   -> ^(FUNCTION_CALL ^(QNAME IDENT["LEFT"]) expr expr*)
+//    | INCLUDE '(' expr (ON expr (',' expr)*)? ')' 				-> ^(FUNCTION_CALL ^(QNAME IDENT["INCLUDE"]) expr expr*)
+//    | INCLUDE '(' ident ')' ON ident		-> ^(FUNCTION_CALL ^(QNAME IDENT["INCLUDE"]) ident ident)
+    | INCLUDE '(' qname ')' (ON qname (',' qname)*)?		-> ^(FUNCTION_CALL ^(QNAME IDENT["INCLUDE"]) qname+)
+    | EXCLUDE '(' qname ')' (ON qname (',' qname)*)?		-> ^(FUNCTION_CALL ^(QNAME IDENT["EXCLUDE"]) qname+)
     ;
 
 // TODO: this should be 'dataType', which supports arbitrary type specifications. For now we constrain to simple types
@@ -969,6 +975,8 @@ DATA: 'DATA';
 D: 'D';
 LONG: 'LONG';
 BIT: 'BIT';
+INCLUDE: 'INCLUDE';
+EXCLUDE: 'EXCLUDE';
 
 EQ  : '=';
 NEQ : '<>' | '!=';

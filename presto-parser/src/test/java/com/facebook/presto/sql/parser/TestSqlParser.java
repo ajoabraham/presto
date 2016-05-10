@@ -108,8 +108,28 @@ public class TestSqlParser
 
         processSql("pass(@[abc] + %%% + @@@::111 + cast(1 as bigint))");
         processSql("pass(@[abc] + %%% + @@@::111 + cast(1 as bigint)) +VPC+ pass(@asdsa)");
+        
+        processSql("right(@[abc], 3)");
+        processSql("left(@[abc], 3, 'aaa')");
+        
+        processSql("include(@aaa)");
+        processSql("include(@aaa) on @bbb");
+        processSql("include(@aaa) on @bbb, @ccc");
+        
+        processSql("exclude(@aaa)");
+        processSql("exclude(@aaa) on @bbb");
+        processSql("exclude(@aaa) on @bbb, @ccc");
     }
 
+    @Test
+    public void testYulinExpiriment()
+            throws Exception
+    {
+        processSql("include(@aaa)");
+        processSql("include(@aaa) on @bbb");
+        processSql("include(@aaa) on @bbb, @ccc");
+    }
+    
     private void processSql(String sql)
     {
         Expression expression = SQL_PARSER.createExpression(sql);
