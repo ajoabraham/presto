@@ -125,9 +125,7 @@ public class TestSqlParser
     public void testYulinExpiriment()
             throws Exception
     {
-        processSql("include(@aaa)");
-        processSql("include(@aaa) on @bbb");
-        processSql("include(@aaa) on @bbb, @ccc");
+        processSqlStatement("select a from cache-abc");
     }
     
     private void processSql(String sql)
@@ -138,6 +136,14 @@ public class TestSqlParser
         System.out.println("expression tostring() -> " + expression.toString());
     }
 
+    private void processSqlStatement(String sql)
+    {
+        Statement statement = SQL_PARSER.createStatement(sql);
+        CommonTree commonTree = SQL_PARSER.parseStatement(sql);
+        System.out.println("treetostring -> " + TreePrinter.treeToString(commonTree));
+        System.out.println("expression tostring() -> " + statement.toString());
+    }
+    
     @Test
     public void testGenericLiteral()
             throws Exception

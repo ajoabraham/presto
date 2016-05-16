@@ -1003,7 +1003,7 @@ DECIMAL_VALUE
     ;
 
 IDENT
-    : (LETTER | '_') (LETTER | DIGIT | '_' | '\@' | ':')*
+    : (LETTER | '_') (LETTER | DIGIT | '_' | '-' | '\@' | ':')*
         { IdentifierSymbol.validateIdentifier(input, getText(), allowedIdentifierSymbols); }
     ;
 
